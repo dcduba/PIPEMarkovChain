@@ -7,6 +7,7 @@ import org.junit.Test;
 import uk.ac.imperial.state.ClassifiedState;
 import uk.ac.imperial.state.Record;
 import uk.ac.imperial.utils.StateUtils;
+import uk.ac.imperial.utils.Pair;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -29,8 +30,8 @@ public class EntireStateReaderTest {
 
     @Test
     public void singleRecord() throws IOException {
-        Map<Integer, Double> successors = new HashMap<>();
-        successors.put(2, 1.0);
+        Map<Integer, Pair<Double, Collection<String>>> successors = new HashMap<>();
+        successors.put(2, new Pair<Double, Collection<String>>(1.0, new ArrayList<String>()));
 
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             try (Output outputStream = new Output(stream);) {
@@ -50,11 +51,11 @@ public class EntireStateReaderTest {
 
     @Test
     public void twoRecords() throws IOException {
-        Map<Integer, Double> successors = new HashMap<>();
-        successors.put(2, 1.0);
+    	Map<Integer, Pair<Double, Collection<String>>> successors = new HashMap<>();
+        successors.put(2, new Pair<Double, Collection<String>>(1.0, new ArrayList<String>()));
 
-        Map<Integer, Double> successors2 = new HashMap<>();
-        successors2.put(1, 2.0);
+        Map<Integer, Pair<Double, Collection<String>>> successors2 = new HashMap<>();
+        successors2.put(1, new Pair<Double, Collection<String>>(2.0, new ArrayList<String>()));
 
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             try (Output outputStream = new Output(stream)) {

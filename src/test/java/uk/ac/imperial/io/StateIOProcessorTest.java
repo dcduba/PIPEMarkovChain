@@ -7,9 +7,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.ac.imperial.state.ClassifiedState;
+import uk.ac.imperial.utils.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collection;
+import java.util.ArrayList;
 
 import static org.mockito.Mockito.verify;
 
@@ -28,14 +31,14 @@ public class StateIOProcessorTest {
     @Mock
     private ClassifiedState state;
 
-    private Map<Integer, Double> successors;
+    private Map<Integer, Pair<Double, Collection<String>>> successors;
 
     private StateIOProcessor processor;
 
     @Before
     public void setUp() {
         successors = new HashMap<>();
-        successors.put(2, 1.4);
+        successors.put(2, new Pair<Double, Collection<String>>(1.4, new ArrayList<String>()));
         processor = new StateIOProcessor(writer, output, stateOutput);
     }
 

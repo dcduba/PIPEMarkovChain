@@ -2,8 +2,10 @@ package uk.ac.imperial.io;
 
 import com.esotericsoftware.kryo.io.Output;
 import uk.ac.imperial.state.ClassifiedState;
+import uk.ac.imperial.utils.Pair;
 
 import java.util.Map;
+import java.util.Collection;
 
 /**
  * This class writes to a StateWriter the collected transitions
@@ -46,8 +48,8 @@ public final class StateIOProcessor implements StateProcessor {
      * @param successorRates unique id for successors to the rate at which they are entered
      */
     @Override
-    public void processTransitions(int stateId, Map<Integer, Double> successorRates) {
-        writer.writeTransitions(stateId, successorRates, transitionOutput);
+    public void processTransitions(int stateId, Map<Integer, Pair<Double, Collection<String>>> successorData) {
+        writer.writeTransitions(stateId, successorData, transitionOutput);
     }
 
     /**

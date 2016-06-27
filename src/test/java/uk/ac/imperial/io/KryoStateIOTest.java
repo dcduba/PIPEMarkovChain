@@ -7,12 +7,15 @@ import org.junit.Test;
 import uk.ac.imperial.state.ClassifiedState;
 import uk.ac.imperial.state.Record;
 import uk.ac.imperial.utils.StateUtils;
+import uk.ac.imperial.utils.Pair;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -28,8 +31,8 @@ public class KryoStateIOTest {
 
     @Test
     public void singleSuccessor() throws IOException {
-        Map<Integer, Double> successors = new HashMap<>();
-        successors.put(2, 1.0);
+        Map<Integer, Pair<Double, Collection<String>>> successors = new HashMap<>();
+        successors.put(2, new Pair<Double, Collection<String>>(1.0, new ArrayList<String>()));
 
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             try  (Output outputStream = new Output(stream)) {
@@ -47,9 +50,9 @@ public class KryoStateIOTest {
 
     @Test
     public void doubleSuccessor() throws IOException {
-        Map<Integer, Double> successors = new HashMap<>();
-        successors.put(2, 1.0);
-        successors.put(3, 2.0);
+        Map<Integer, Pair<Double, Collection<String>>> successors = new HashMap<>();
+        successors.put(2, new Pair<Double, Collection<String>>(1.0, new ArrayList<String>()));
+        successors.put(3, new Pair<Double, Collection<String>>(2.0, new ArrayList<String>()));
 
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             try  (Output outputStream = new Output(stream)) {

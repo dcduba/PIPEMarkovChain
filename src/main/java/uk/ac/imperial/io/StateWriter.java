@@ -2,8 +2,10 @@ package uk.ac.imperial.io;
 
 import com.esotericsoftware.kryo.io.Output;
 import uk.ac.imperial.state.ClassifiedState;
+import uk.ac.imperial.utils.Pair;
 
 import java.util.Map;
+import java.util.Collection;
 
 /**
  * Contains methods for writing transitions and state mappings to output streams
@@ -15,7 +17,7 @@ public interface StateWriter {
      * @param state
      * @param successors
      */
-    void writeTransitions(int state, Map<Integer, Double> successors, Output output);
+    void writeTransitions(int state, Map<Integer, Pair<Double, Collection<String>>> successors, Output output);
 
     /**
      * Logs state to state id in output

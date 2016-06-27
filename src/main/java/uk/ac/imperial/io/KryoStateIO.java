@@ -5,11 +5,15 @@ import com.esotericsoftware.kryo.KryoException;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.MapSerializer;
+
 import uk.ac.imperial.state.*;
+import uk.ac.imperial.utils.Pair;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collection;
+import java.util.ArrayList;
 
 /**
  * Implementation that uses Kryo external library to serialize objects
@@ -39,6 +43,8 @@ public final class KryoStateIO implements StateWriter, StateReader {
         kryo.register(Integer.class);
         kryo.register(Boolean.class);
         kryo.register(Map.class, new MapSerializer());
+        kryo.register(Pair.class);
+        kryo.register(String.class);
     }
 
 
@@ -57,12 +63,17 @@ public final class KryoStateIO implements StateWriter, StateReader {
      * @param output Kryo output to write to
      */
     @Override
-    public void writeTransitions(int state, Map<Integer, Double> successors, Output output) {
+    public void writeTransitions(int state, Map<Integer, Pair<Double, Collection<String>>> successors, Output output) {
         kryo.writeObject(output, state);
         kryo.writeObject(output, successors.size());
-        for (Map.Entry<Integer, Double> entry : successors.entrySet()) {
+        for (Map.Entry<Integer, Pair<Double, Collection<String>>> entry : successors.entrySet()) {
             kryo.writeObject(output, entry.getKey());
-            kryo.writeObject(output, entry.getValue());
+            Pair<Double, Collection<String>> pair = entry.getValue();
+            kryo.writeObject(output, pair.getLeft());
+            kryo.writeObject(output, pair.getRight().size());
+            for (String name : pair.getRight()) {
+            	kryo.writeObject(output, name);
+            }
         }
     }
 
@@ -98,13 +109,21 @@ public final class KryoStateIO implements StateWriter, StateReader {
         try {
             Integer state = kryo.readObject(input, Integer.class);
             int successors = kryo.readObject(input, Integer.class);
-            Map<Integer, Double> successorRates = new HashMap<>();
+            Map<Integer, Pair<Double, Collection<String>>> successorData = new HashMap<>();
             for (int i = 0; i < successors; i++) {
                 Integer successor = kryo.readObject(input, Integer.class);
+                Collection<String> transitionNames = new ArrayList<>();
                 Double rate = kryo.readObject(input, Double.class);
-                successorRates.put(successor, rate);
+                
+                int numberOfNames = kryo.readObject(input, Integer.class);
+                for (int j = 0; j < numberOfNames; j++) {
+                	transitionNames.add(kryo.readObject(input, String.class));
+                }
+                
+                Pair<Double, Collection<String>> pair = new Pair<>(rate, transitionNames);
+                successorData.put(successor, pair);
             }
-            return new Record(state, successorRates);
+            return new Record(state, successorData);
         } catch (KryoException e) {
             throw  new IOException("Cannot read record", e);
         }

@@ -1,6 +1,8 @@
 package uk.ac.imperial.io;
 
 import uk.ac.imperial.state.ClassifiedState;
+import uk.ac.imperial.utils.Pair;
+import java.util.Collection;
 
 import java.util.Map;
 
@@ -16,9 +18,9 @@ public interface StateProcessor {
      * integer form since the name of the state is not needed
      *
      * @param stateId unique id for state
-     * @param successorRates unique id for successors to the rate at which they are enterd
+     * @param successorData unique id for successors to the rate at which they are enterd
      */
-    void processTransitions(int stateId, Map<Integer, Double> successorRates);
+    void processTransitions(int stateId, Map<Integer, Pair<Double, Collection<String>>> successorData);
 
     /**
      *

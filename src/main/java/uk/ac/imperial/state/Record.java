@@ -1,6 +1,8 @@
 package uk.ac.imperial.state;
 
 import java.util.Map;
+import java.util.Collection;
+import uk.ac.imperial.utils.Pair;
 
 /**
  * Immutable record struct for storing state transitions
@@ -16,7 +18,8 @@ public class Record {
      * States that the specified state field can transition to
      * and the rate in which it enters them
      */
-    public final Map<Integer, Double> successors;
+    public final Map<Integer, Pair<Double, Collection<String>>> successors;
+    //public final Map<Integer, Double> successors;
 
     /**
      * Constructor storing a state and successor for future retrial
@@ -24,10 +27,15 @@ public class Record {
      * @param state
      * @param successors
      */
-    public Record(int state, Map<Integer, Double> successors) {
+    public Record(int state, Map<Integer, Pair<Double, Collection<String>>> successors) {
         this.state = state;
         this.successors = successors;
     }
+    
+    /*public Record(int state, Map<Integer, Double> successors) {
+    	this.state = state;
+    	this.successors = successors;
+    }*/
 
     @Override
     public int hashCode() {
@@ -55,5 +63,14 @@ public class Record {
         }
 
         return true;
+    }
+    
+    /**
+    *
+    * @return string representation of the record
+    */
+    @Override
+    public String toString() {
+        return state + ": " + successors.toString();
     }
 }
